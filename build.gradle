@@ -1,0 +1,34 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.0.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'com.phani.spring'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation("com.sun.xml.bind:jaxb-osgi:2.3.3")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude group:"com.sun.xml.bind", module:"jaxb-osgi"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
