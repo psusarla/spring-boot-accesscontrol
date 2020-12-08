@@ -1,6 +1,8 @@
 package com.phani.spring.accesscontrol;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -10,6 +12,9 @@ import java.util.stream.Collectors;
 
 @RestController
 public class BooksController {
+
+    @Autowired
+    private UserService userService;
 
     Map<Integer, Book> bookMap = new HashMap<>();
     int counter = 0;
@@ -38,6 +43,12 @@ public class BooksController {
         book.setId(++counter);
         bookMap.put(book.getId(), book);
         return book;
+    }
+
+    @GetMapping("/users/{username}")
+    @PreAuthorize("#username == authentication.principal.username")
+    public User getUser(@PathVariable String username) {
+        return userService.findUserByUsername(username);
     }
 
     @PostConstruct
